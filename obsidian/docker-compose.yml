@@ -1,0 +1,31 @@
+services:
+  ignis:
+    image: nobbe/ignis:latest
+    container_name: ignis
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./vaults:/vaults
+      - ./data:/app/data
+      - obsidian-app:/app/obsidian-app
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.obsidian.rule=Host(`obsidian.purplebench.ru`)"
+      - "traefik.http.routers.obsidian.entrypoints=websecure"
+      - "traefik.http.routers.obsidian.tls.certresolver=le"
+      - "traefik.http.services.obsidian.loadbalancer.server.port=8080"
+      # Basic Auth (см. пункт 3)
+      - "traefik.http.routers.obsidian.middlewares=obsidian-auth"
+      - "traefik.http.middlewares.obsidian-auth.basicauth.users=adminobs:$$apr1$$hSjvc0r0$$o397RWVe4p3uHsFxz64MR/"
+
+volumes:
+  obsidian-app:
+
+networks:
+  proxy:
+    external: true

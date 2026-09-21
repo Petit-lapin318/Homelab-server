@@ -1,0 +1,18 @@
+# Секреты
+.env
+*.env
+!*.env.example
+
+# Данные и volumes
+data/
+*.db
+*.db-shm
+*.db-wal
+acme.json
+
+# Логи
+*.log
+
+# Системное
+.DS_Store
+*.swp

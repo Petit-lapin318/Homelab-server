@@ -1,0 +1,46 @@
+services:
+  traefik:
+    image: traefik:v3.6.1
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./acme.json:/acme.json
+    networks:
+      - proxy
+    command:
+      # API + дашборд
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+      # Docker провайдер
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=proxy"
+      # Точки входа
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # Редирект HTTP -> HTTPS
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      # Let's Encrypt
+      - "--certificatesresolvers.le.acme.email=apavlov318@yandex.ru"
+      - "--certificatesresolvers.le.acme.storage=/acme.json"
+      - "--certificatesresolvers.le.acme.tlschallenge=true"
+    labels:
+      - "traefik.enable=true"
+      # Роутер для дашборда
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.purplebench.ru`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=le"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      # Basic auth
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$05$$DFNhXE24XHD1iAyUFH8fpeIKVSNqr33s6al.5/NVOu0fg.MHU5SUi"
+
+networks:
+  proxy:
+    external: true
