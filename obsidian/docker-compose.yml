@@ -21,7 +21,7 @@ services:
       - "traefik.http.services.obsidian.loadbalancer.server.port=8080"
       # Basic Auth (см. пункт 3)
       - "traefik.http.routers.obsidian.middlewares=obsidian-auth"
-      - "traefik.http.middlewares.obsidian-auth.basicauth.users=adminobs:$$apr1$$hSjvc0r0$$o397RWVe4p3uHsFxz64MR/"
+      - "traefik.http.middlewares.obsidian-auth.basicauth.users=${OBSIDIAN_AUTH}"
 
 volumes:
   obsidian-app:

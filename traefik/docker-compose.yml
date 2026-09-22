@@ -26,7 +26,7 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       # Let's Encrypt
-      - "--certificatesresolvers.le.acme.email=apavlov318@yandex.ru"
+      - "--certificatesresolvers.le.acme.email=${ACME_EMAIL}"
       - "--certificatesresolvers.le.acme.storage=/acme.json"
       - "--certificatesresolvers.le.acme.tlschallenge=true"
     labels:
@@ -39,7 +39,7 @@ services:
       - "traefik.http.routers.dashboard.service=api@internal"
       # Basic auth
       - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$05$$DFNhXE24XHD1iAyUFH8fpeIKVSNqr33s6al.5/NVOu0fg.MHU5SUi"
+      - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH}"
 
 networks:
   proxy:
