@@ -1,6 +1,7 @@
 # purplebench-infra
 
-Инфраструктура личного сервера purplebench.ru.
+Личная инфраструктура на VPS: reverse proxy, мониторинг и self-hosted сервисы.
+Всё запускается через Docker Compose, трафик идёт через Traefik с автоматическим TLS.
 
 ## Сервисы
 
@@ -21,4 +22,3 @@
 1. Установить Docker + Compose.
 2. Создать сеть: `docker network create proxy`.
 3. В каждой папке: `docker compose up -d`.
-4. Восстановить данные из бэкапа.
