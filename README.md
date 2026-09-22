@@ -1,4 +1,4 @@
-# purplebench-infra
+# HomeLab server
 
 Личная инфраструктура на VPS: reverse proxy, мониторинг и self-hosted сервисы.
 Всё запускается через Docker Compose, трафик идёт через Traefik с автоматическим TLS.
